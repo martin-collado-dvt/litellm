@@ -1,5 +1,7 @@
 name: Compare unchanged baseline timeout test
 on:
+  push:
+    branches: [litellm_timeout_investigation]
   workflow_dispatch:
 permissions:
   contents: read
