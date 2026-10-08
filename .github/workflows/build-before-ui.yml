@@ -1,0 +1,26 @@
+name: Build merge-base UI for browser comparison
+on:
+  push:
+    branches: [litellm_ui_before_build]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
+        with:
+          repository: BerriAI/litellm
+          ref: 7a659973e362673d130e33f51b2a4332644b8260
+          persist-credentials: false
+      - name: Build unmodified merge-base UI
+        run: docker build -f ui/Dockerfile -t litellm-ui:pr45316-before .
+      - name: Export image
+        run: docker save litellm-ui:pr45316-before | gzip -1 > "$RUNNER_TEMP/litellm-ui-before.tar.gz"
+      - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1
+        with:
+          name: litellm-ui-pr45316-before
+          path: ${{ runner.temp }}/litellm-ui-before.tar.gz
+          retention-days: 3
+          compression-level: 0
