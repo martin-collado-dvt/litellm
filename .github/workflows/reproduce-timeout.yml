@@ -1,0 +1,56 @@
+name: Compare unchanged baseline timeout test
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  UV_PYTHON: "3.12"
+  LITELLM_LOCAL_MODEL_COST_MAP: "True"
+jobs:
+  reproduce:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - name: upstream-base
+            repository: BerriAI/litellm
+            revision: 0e26edfdb95c8288a610cba4746af2bc1f2fe312
+          - name: failed-pr-merge
+            repository: BerriAI/litellm
+            revision: fc79d6a8c41e89c044e3b16ebc4b0c5722daaddc
+    name: ${{ matrix.name }}
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
+        with:
+          repository: ${{ matrix.repository }}
+          ref: ${{ matrix.revision }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - uses: ./.github/actions/setup-uv-with-retries
+        with:
+          version: "0.10.9"
+      - uses: ./.github/actions/rust-bridge
+      - name: Install exact upstream CI dependencies
+        run: .github/scripts/uv_sync_with_retries.sh --frozen --group ci --group proxy-dev --extra google --extra proxy --extra semantic-router --extra saml --extra caching --extra extra_proxy --extra proxy-runtime
+      - name: Generate Prisma client
+        run: uv run --no-sync prisma generate --schema litellm/proxy/schema.prisma
+      - name: Record unchanged source identities
+        run: |
+          git rev-parse HEAD
+          sha256sum tests/unit/proxy/hooks/test_autorouter_baseline_cache.py litellm/proxy/hooks/autorouter_baseline_cache.py litellm/litellm_core_utils/logging_worker.py uv.lock
+      - name: Repeat the exact failing test without retries
+        run: |
+          for attempt in $(seq 1 10); do
+            uv run --no-sync pytest tests/unit/proxy/hooks/test_autorouter_baseline_cache.py::test_native_count_finishing_after_quarter_worker_budget_keeps_plan_and_spend --tb=short -vv --reruns 0 --timeout=120
+          done
+      - name: Run original proxy-hooks-client shard
+        if: always()
+        env:
+          COVERAGE_CORE: sysmon
+        run: |
+          uv run --no-sync pytest tests/unit/proxy/hooks tests/unit/proxy/policy_engine tests/unit/proxy/client --ignore=tests/unit/proxy/hooks/test_banned_keyword_list.py --ignore=tests/unit/proxy/hooks/test_unit_test_max_model_budget_limiter.py --tb=short -vv --maxfail=10 -n 4 --dist=loadscope --reruns 0 --timeout=120 --durations=20 --cov=./litellm --cov=./enterprise/litellm_enterprise --cov-report=xml:coverage.xml --cov-config=pyproject.toml
