@@ -1,0 +1,62 @@
+{
+  "url": "http://127.0.0.1:43020/services/llm/ui/login",
+  "body": "🚅 LiteLLM\nLoading...",
+  "failedRequests": [
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/0ckv5j_fni3xm.css",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/1tzeo86n7xtpi.css",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/1qwsems_2wy_n.js",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/1edfvwc5_eck-.js",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/0if-vqkhyn-zc.js",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/turbopack-0l31z1wlxemne.js",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/2atns3zer6s42.js",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/1kpvojzxb_2ce.js",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/37_iuxv24x8uo.js",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/2gur-ho5rpe0r.js",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/1r3r4q5ji9p6r.js",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/1t7m5lyrljbza.js",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:43020/litellm-asset-prefix/_next/static/chunks/0gs2d8vwy50op.js",
+      "status": 404
+    }
+  ]
+}

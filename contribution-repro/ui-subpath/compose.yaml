@@ -1,0 +1,14 @@
+services:
+  ui:
+    image: ghcr.io/berriai/litellm-ui:v1.104.1
+    environment:
+      SERVER_ROOT_PATH: /services/llm
+      LITELLM_BACKEND_URL: http://localhost:8080/services/llm
+  ingress:
+    image: nginx:1.31.5-alpine3.24
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./ingress.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - ui
