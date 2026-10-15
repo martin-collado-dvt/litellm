@@ -1,7 +1,7 @@
 name: Build patched release UI
 on:
   push:
-    branches: [litellm_release_1_105_1_prefixed]
+    branches: [litellm_release_1_105_1_prefixed, litellm_ui_cluster_build]
 permissions:
   contents: read
 jobs:
