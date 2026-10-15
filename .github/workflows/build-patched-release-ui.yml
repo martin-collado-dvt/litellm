@@ -1,0 +1,24 @@
+name: Build patched release UI
+on:
+  push:
+    branches: [litellm_release_1_105_1_prefixed]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955
+        with:
+          persist-credentials: false
+      - name: Build official UI Dockerfile with runtime prefix support
+        run: docker build -f ui/Dockerfile -t litellm-ui:v1.105.1-prefixed .
+      - name: Export image
+        run: docker save litellm-ui:v1.105.1-prefixed | gzip -1 > "$RUNNER_TEMP/litellm-ui.tar.gz"
+      - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1
+        with:
+          name: litellm-ui-v1.105.1-prefixed
+          path: ${{ runner.temp }}/litellm-ui.tar.gz
+          retention-days: 7
+          compression-level: 0
