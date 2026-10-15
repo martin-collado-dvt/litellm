@@ -1,5 +1,6 @@
 name: Build patched release UI
 on:
+  workflow_dispatch:
   push:
     branches: [litellm_release_1_105_1_prefixed, litellm_ui_cluster_build]
 permissions:
