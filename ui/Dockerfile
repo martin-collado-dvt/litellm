@@ -22,7 +22,8 @@ RUN --mount=type=cache,target=/root/.npm \
     npm ci --prefer-offline
 
 COPY ui/litellm-dashboard/ ./
-RUN npm run build
+# The v1.110.0 dashboard exceeds Node's default ~2 GB heap on a 7 GB runner.
+RUN NODE_OPTIONS=--max-old-space-size=4096 npm run build
 
 # ---------- runtime ----------
 FROM nginx:${NGINX_VERSION} AS runtime
